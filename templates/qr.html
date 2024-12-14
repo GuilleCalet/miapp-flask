@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código QR</title>
+    <title>QR Generado</title>
+    <!-- Vincular CSS -->
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="qr-container">
-        <h1>¡Código QR Generado!</h1>
-        <p><strong>Nombre del Paciente:</strong> {{ nombre }}</p>
+        <h1>¡Código QR generado exitosamente!</h1>
+        <p>Nombre: {{ nombre }}</p>
         <img src="{{ qr_path }}" alt="Código QR">
+        <a href="/">Volver al inicio</a>
     </div>
 </body>
 </html>
