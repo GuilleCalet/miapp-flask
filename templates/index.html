@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Códigos QR</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <form action="/generate" method="POST">
+        <h1>Generador de Códigos QR</h1>
+        <input type="text" name="nombre" placeholder="Nombre del Paciente" required>
+        <input type="number" name="edad" placeholder="Edad" required>
+        <input type="text" name="diagnostico" placeholder="Diagnóstico" required>
+        <button type="submit">Generar Código QR</button>
+    </form>
 
+    <div class="buttons-container">
+        <a href="/pacientes">
+            <button class="blue-button">Ver Pacientes</button>
+        </a>
+        <a href="/about">
+            <button class="red-button">Acerca de</button>
+        </a>
+    </div>
+</body>
+</html>

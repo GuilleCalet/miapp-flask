@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Paciente</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="paciente-container">
+        <h1>Información del Paciente</h1>
+        <p><strong>Nombre:</strong> {{ nombre }}</p>
+        <p><strong>Edad:</strong> {{ edad }}</p>
+        <p><strong>Diagnóstico:</strong> {{ diagnostico }}</p>
+
+        <h2>Registrar Pregunta</h2>
+        <form action="/pregunta/{{ id }}" method="POST">
+            <textarea name="pregunta" rows="4" cols="50" placeholder="Escribe tu pregunta aquí..." required></textarea>
+            <button type="submit" class="blue-button">Guardar Pregunta</button>
+        </form>
+    </div>
+</body>
+</html>
