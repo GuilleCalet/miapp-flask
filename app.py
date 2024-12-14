@@ -1,69 +1,71 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv
+# Configuración de la carpeta QR
 import os
+import sqlite3  # Biblioteca para trabajar con SQLite
+from flask import Flask, render_template, request
 
-# Cargar variables de entorno
-load_dotenv()
+app = Flask(__name__)
 
-app = Flask(_name_)
+QR_FOLDER = os.path.join(app.root_path, 'static', 'qr_codes')  # Ruta absoluta del sistema
+os.makedirs(QR_FOLDER, exist_ok=True)  # Crea la carpeta si no existe
 
 # Configuración de la base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Asegúrate de que DATABASE_URL esté configurado correctamente
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+DATABASE = os.path.join(app.root_path, 'database.db')
 
-# Inicializar la base de datos
-db = SQLAlchemy(app)
-
-# Modelo para almacenar datos QR
-class QRModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    qr_content = db.Column(db.Text, nullable=False)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 def init_db():
-    with app.app_context():
-        db.create_all()
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS pacientes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT,
+            edad INTEGER,
+            diagnostico TEXT,
+            qr_path TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-@app.route('/save_qr', methods=['POST'])
-def save_qr():
-    try:
-        data = request.json
-        if not data or 'qr_data' not in data:
-            return jsonify({"error": "Faltan datos de entrada"}), 400
+@app.route('/generate', methods=['POST'])
+def generate_qr():
+    nombre = request.form['nombre']
+    edad = request.form['edad']
+    diagnostico = request.form['diagnostico']
 
-        qr_data = data['qr_data']
-        new_qr = QRModel(qr_content=qr_data)
-        db.session.add(new_qr)
-        db.session.commit()
+    # Ruta para guardar el QR
+    qr_filename = f"{nombre}_{edad}.png"
+    qr_path_full = os.path.join(QR_FOLDER, qr_filename)  # Ruta absoluta en el sistema
+    qr_path = f"/static/qr_codes/{qr_filename}"  # Ruta accesible desde el navegador
 
-        return jsonify({"message": "QR guardado correctamente", "id": new_qr.id}), 201
+    # Guardar los datos en la base de datos
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO pacientes (nombre, edad, diagnostico, qr_path) VALUES (?, ?, ?, ?)',
+                   (nombre, edad, diagnostico, qr_path))
+    conn.commit()
+    conn.close()
 
-    except Exception as e:
-        return jsonify({"error": f"Error al guardar QR: {str(e)}"}), 500
+    # Crear el QR
+    import qrcode
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(f"http://example.com/{nombre}")
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
 
-@app.route('/get_qr/<int:qr_id>', methods=['GET'])
-def get_qr(qr_id):
-    try:
-        qr_entry = QRModel.query.get(qr_id)
-        if not qr_entry:
-            return jsonify({"error": "QR no encontrado"}), 404
+    # Guardar la imagen
+    img.save(qr_path_full)
 
-        return jsonify({"id": qr_entry.id, "qr_content": qr_entry.qr_content}), 200
+    # Redirigir a la página qr.html con los datos
+    return render_template('qr.html', nombre=nombre, qr_path=qr_path)
 
-    except Exception as e:
-        return jsonify({"error": f"Error al recuperar QR: {str(e)}"}), 500
-
-@app.route('/list_qrs', methods=['GET'])
-def list_qrs():
-    try:
-        qrs = QRModel.query.all()
-        qr_list = [{"id": qr.id, "qr_content": qr.qr_content} for qr in qrs]
-
-        return jsonify(qr_list), 200
-
-    except Exception as e:
-        return jsonify({"error": f"Error al listar QRs: {str(e)}"}), 500
-
-if _name_ == '_main_':
-    init_db()
+if __name__ == '__main__':
     app.run(debug=True)
