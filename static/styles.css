@@ -1,0 +1,116 @@
+/* Estilo general del cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #d3d3d3; /* Gris claro */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    align-items: center; /* Centrar contenido verticalmente */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+/* Encabezado */
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilo del formulario */
+form {
+    display: flex;
+    flex-direction: column; /* Colocar los elementos en columna */
+    align-items: center; /* Centrar los elementos */
+    gap: 15px; /* Espaciado entre elementos */
+    background-color: white; /* Fondo blanco para el formulario */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Campos de entrada */
+form input {
+    padding: 10px;
+    width: 300px; /* Ancho fijo */
+    max-width: 80%;
+    font-size: 16px;
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px;
+}
+
+/* Botón de "Generar Código QR" */
+form button {
+    padding: 10px 20px;
+    background-color: #32cd32; /* Verde chillón */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #28a828; /* Verde ligeramente más oscuro al pasar el mouse */
+}
+
+/* Contenedor de botones secundarios */
+.buttons-container {
+    display: flex;
+    justify-content: center; /* Centrar botones */
+    gap: 20px; /* Espaciado entre botones */
+    margin-top: 20px;
+}
+
+/* Botón azul */
+.blue-button {
+    background-color: #2196F3; /* Azul */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.blue-button:hover {
+    background-color: #1976D2; /* Azul más oscuro */
+}
+
+/* Botón rojo */
+.red-button {
+    background-color: #f44336; /* Rojo */
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.red-button:hover {
+    background-color: #d32f2f; /* Rojo más oscuro */
+}
+/* Estilo para la página de QR */
+.qr-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.qr-container h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.qr-container p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.qr-container img {
+    max-width: 300px;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
